@@ -1,0 +1,70 @@
+# PHP
+*.log
+*.cache
+*.tmp
+
+# Configuration files (sensitive data)
+includes/config.php
+
+# Uploads folder (user uploaded files)
+uploads/*
+!uploads/.gitkeep
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Backup files
+*.bak
+*.backup
+*.old
+*~
+
+# Temporary files
+tmp/
+temp/
+cache/
+
+# Node modules (if using npm)
+node_modules/
+package-lock.json
+
+# Composer (if using)
+vendor/
+composer.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database dumps (except the main one)
+*.sql
+!sql/devshop_with_data.sql
+!sql/devshop_structure.sql
+
+# Error logs
+error_log
+php_errors.log
+
+# Session files
+sessions/
+
+# Test files
+tests/
+phpunit.xml
+.phpunit.result.cache

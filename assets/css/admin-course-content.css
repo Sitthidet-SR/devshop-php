@@ -1,0 +1,124 @@
+.content-box {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    .section-card {
+        background: white;
+        border: 2px solid #ecf0f1;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .section-header {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #ecf0f1;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .lecture-list {
+        padding: 15px;
+    }
+
+    .lecture-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #ecf0f1;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        transition: all 0.3s;
+    }
+
+    .lecture-item:hover {
+        background: #f8f9fa;
+        border-color: #667eea;
+    }
+
+    .lecture-icon {
+        width: 40px;
+        height: 40px;
+        background: #667eea;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+
+    .lecture-info {
+        flex: 1;
+    }
+
+    .lecture-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 3px;
+    }
+
+    .lecture-meta {
+        font-size: 13px;
+        color: #7f8c8d;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 13px;
+        display: inline-block;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: #667eea;
+        color: white;
+    }
+
+    .btn-success {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-warning {
+        background: #ffc107;
+        color: #212529;
+    }
+
+    .btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: #7f8c8d;
+    }
+
+    .empty-state i {
+        font-size: 60px;
+        margin-bottom: 15px;
+        opacity: 0.3;
+    }

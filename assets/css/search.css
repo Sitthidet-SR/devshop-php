@@ -1,0 +1,122 @@
+.search-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .search-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .search-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .search-query {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .search-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .search-info h2 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .search-count {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sort-options label {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .sort-options select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .no-results i {
+            font-size: 80px;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+
+        .no-results h3 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .search-suggestions {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+        }
+
+        .search-suggestions h4 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .search-suggestions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .search-suggestions li {
+            margin-bottom: 10px;
+        }
+
+        .search-suggestions a {
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-suggestions a:hover {
+            text-decoration: underline;
+        }
