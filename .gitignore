@@ -3,13 +3,6 @@
 *.cache
 *.tmp
 
-# Configuration files (sensitive data)
-includes/config.php
-
-# Uploads folder (user uploaded files)
-uploads/*
-!uploads/.gitkeep
-
 # IDE and Editor files
 .vscode/
 .idea/
