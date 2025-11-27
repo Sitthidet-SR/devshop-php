@@ -72,7 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: courses.php?msg=added');
             exit;
         } else {
-            $error = 'บันทึกลงฐานข้อมูลไม่สำเร็จ: ' . $conn->error;
+            // ตรวจสอบ error แบบละเอียด
+            if (strpos($conn->error, 'Duplicate entry') !== false && strpos($conn->error, 'course_slug') !== false) {
+                $error = 'Course Slug ซ้ำ! กรุณาใช้ slug ที่ไม่ซ้ำกัน';
+            } else {
+                $error = 'บันทึกลงฐานข้อมูลไม่สำเร็จ: ' . $conn->error;
+            }
         }
     }
 }
@@ -175,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <input type="file" name="thumbnail" accept="image/*" id="thumbnail-input" onchange="previewImage(this)">
                 <small style="color: #7f8c8d;">
-                    <i class="fas fa-info-circle"></i> อัพโหลดรูปภาพ (JPG, PNG, GIF, WebP - สูงสุด 2MB)
+                    <i class="fas fa-info-circle"></i> อัพโหลดรูปภาพ (JPG, PNG, GIF, WebP - สูงสุด <?php echo ini_get('upload_max_filesize'); ?>)
                 </small>
             </div>
 
@@ -195,12 +200,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (input.files && input.files[0]) {
                         const file = input.files[0];
                         
-                        // ตรวจสอบขนาดไฟล์ (2MB = 2097152 bytes)
-                        if (file.size > 2097152) {
+                        // ตรวจสอบขนาดไฟล์ (100MB = 104857600 bytes)
+                        if (file.size > 104857600) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'ไฟล์ใหญ่เกินไป',
-                                text: 'ไฟล์มีขนาด ' + (file.size / 1048576).toFixed(2) + ' MB กรุณาเลือกไฟล์ที่เล็กกว่า 2MB',
+                                text: 'ไฟล์มีขนาด ' + (file.size / 1048576).toFixed(2) + ' MB กรุณาเลือกไฟล์ที่เล็กกว่า 100MB',
                                 confirmButtonColor: '#667eea'
                             });
                             input.value = '';

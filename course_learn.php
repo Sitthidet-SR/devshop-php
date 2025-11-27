@@ -102,10 +102,17 @@ foreach ($sections as $section) {
                         <source src="<?php echo htmlspecialchars($current_lecture['content_url']); ?>" type="video/mp4">
                         เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
                     </video>
+                <?php elseif ($current_lecture && $current_lecture['lecture_type'] == 'video' && !$current_lecture['content_url']): ?>
+                    <div class="video-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-clock" style="font-size: 80px; color: white; margin-bottom: 20px;"></i>
+                        <h3 style="color: white; margin-bottom: 10px;">รอเพิ่มบทเรียน</h3>
+                        <p style="color: rgba(255,255,255,0.9);">บทเรียนนี้กำลังอยู่ระหว่างการอัพเดท</p>
+                        <p style="color: rgba(255,255,255,0.8); font-size: 14px;">กรุณากลับมาดูใหม่ภายหลัง</p>
+                    </div>
                 <?php else: ?>
                     <div class="video-placeholder">
                         <i class="fas fa-play-circle"></i>
-                        <p><?php echo $current_lecture ? 'ไม่มีวิดีโอสำหรับบทเรียนนี้' : 'เลือกบทเรียนเพื่อเริ่มเรียน'; ?></p>
+                        <p>เลือกบทเรียนเพื่อเริ่มเรียน</p>
                     </div>
                 <?php endif; ?>
             </div>

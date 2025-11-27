@@ -133,10 +133,20 @@ $my_courses = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
                             </div>
                             
                             <?php if ($course['progress'] == 100): ?>
-                                <div style="margin-bottom: 15px;">
+                                <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                                     <span class="completed-badge">
                                         <i class="fas fa-trophy"></i> เรียนจบแล้ว
                                     </span>
+                                    <a href="certificate.php?course_id=<?php echo $course['course_id']; ?>" 
+                                       class="btn-certificate" 
+                                       style="padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                                        <i class="fas fa-certificate"></i> ดูใบประกาศ
+                                    </a>
+                                    <a href="certificate_pdf.php?id=<?php echo $course['enrollment_id']; ?>" 
+                                       class="btn-certificate" 
+                                       style="padding: 6px 12px; background: #dc3545; color: white; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                                        <i class="fas fa-file-pdf"></i> ดาวน์โหลด PDF
+                                    </a>
                                 </div>
                             <?php endif; ?>
 

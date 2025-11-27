@@ -20,6 +20,24 @@ if (!isset($_GET['id'])) {
 $lecture_id = intval($_GET['id']);
 $course_id = intval($_GET['course']);
 
+// Handle delete video
+if (isset($_POST['delete_video'])) {
+    $check_sql = "SELECT content_url FROM lectures WHERE lecture_id = $lecture_id";
+    $check_result = $conn->query($check_sql);
+    if ($check_result && $row = $check_result->fetch_assoc()) {
+        $content_url = $row['content_url'];
+        if ($content_url && strpos($content_url, 'uploads/videos/') === 0) {
+            $file_path = '../' . $content_url;
+            if (file_exists($file_path)) {
+                unlink($file_path);
+            }
+        }
+        $conn->query("UPDATE lectures SET content_url = NULL WHERE lecture_id = $lecture_id");
+    }
+    header('Location: lecture_edit.php?id=' . $lecture_id . '&course=' . $course_id . '&msg=video_deleted');
+    exit;
+}
+
 $lecture_sql = "SELECT l.*, s.section_title, s.course_id 
                 FROM lectures l 
                 JOIN sections s ON l.section_id = s.section_id 
@@ -83,21 +101,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($file['size'] > 100 * 1024 * 1024) {
                     $upload_error = 'ไฟล์ใหญ่เกิน 100MB';
                 } else {
+                    // สร้างโฟลเดอร์ถ้ายังไม่มี
                     if (!file_exists('../uploads/videos')) {
                         mkdir('../uploads/videos', 0777, true);
+                        chmod('../uploads/videos', 0777);
                     }
 
-                    if ($content_url && file_exists('../' . $content_url)) {
-                        @unlink('../' . $content_url);
+                    // ลบไฟล์เก่าถ้ามี
+                    if ($content_url && strpos($content_url, 'uploads/videos/') === 0) {
+                        $old_file = '../' . $content_url;
+                        if (file_exists($old_file)) {
+                            unlink($old_file);
+                        }
                     }
 
+                    // สร้างชื่อไฟล์ใหม่
                     $new_filename = 'video_' . time() . '_' . rand(1000, 9999) . '.' . $extension;
                     $upload_path = '../uploads/videos/' . $new_filename;
 
+                    // อัพโหลดไฟล์ใหม่
                     if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+                        chmod($upload_path, 0644);
                         $content_url = 'uploads/videos/' . $new_filename;
                     } else {
-                        $upload_error = 'ไม่สามารถย้ายไฟล์ได้';
+                        $upload_error = 'ไม่สามารถย้ายไฟล์ได้ ตรวจสอบ permissions ของโฟลเดอร์';
                     }
                 }
             }
@@ -170,15 +197,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="form-group" id="video_field">
             <label>ไฟล์วิดีโอ</label>
             <?php if ($lecture['content_url']): ?>
-                <div class="video-preview">
-                    <p style="color: #28a745; margin-bottom: 10px;">
-                        <i class="fas fa-check-circle"></i> มีวิดีโออยู่แล้ว
-                    </p>
-                    <video controls style="max-width: 100%; border-radius: 8px;">
-                        <source src="../<?php echo htmlspecialchars($lecture['content_url']); ?>" type="video/mp4">
-                    </video>
-                    <p style="margin-top: 10px; color: #7f8c8d; font-size: 13px;">อัพโหลดไฟล์ใหม่เพื่อแทนที่วิดีโอเดิม</p>
+                <div class="video-preview" style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="flex: 1;">
+                            <p style="color: #28a745; margin: 0 0 8px 0; font-weight: 600;">
+                                <i class="fas fa-check-circle"></i> มีวิดีโออยู่แล้ว
+                            </p>
+                            <p style="color: #495057; margin: 0 0 5px 0; font-size: 14px;">
+                                <i class="fas fa-file-video"></i> <?php echo basename($lecture['content_url']); ?>
+                            </p>
+                            <p style="color: #6c757d; margin: 0; font-size: 13px;">
+                                <i class="fas fa-info-circle"></i> อัพโหลดไฟล์ใหม่ด้านล่างเพื่อแทนที่
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <a href="../<?php echo htmlspecialchars($lecture['content_url']); ?>" target="_blank" class="btn-secondary" style="padding: 8px 16px; text-decoration: none; display: inline-block;">
+                                <i class="fas fa-external-link-alt"></i> เปิดดู
+                            </a>
+                            <button type="button" onclick="deleteVideo()" class="btn-danger" style="padding: 8px 16px;">
+                                <i class="fas fa-trash"></i> ลบ
+                            </button>
+                        </div>
+                    </div>
                 </div>
+            <?php else: ?>
+                <p style="color: #6c757d; margin-bottom: 10px;">
+                    <i class="fas fa-info-circle"></i> ยังไม่มีวิดีโอ กรุณาเลือกไฟล์เพื่ออัพโหลด
+                </p>
             <?php endif; ?>
             <input type="file" name="video_file" accept="video/*">
             <small style="color: #7f8c8d;">รองรับ: MP4, WebM (ขนาดไม่เกิน 100MB)</small>
@@ -218,6 +263,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     toggleFields();
+
+    function deleteVideo() {
+        Swal.fire({
+            title: 'ยืนยันการลบ?',
+            text: 'คุณต้องการลบวิดีโอนี้หรือไม่?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'ใช่, ลบเลย!',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.innerHTML = '<input type="hidden" name="delete_video" value="1">';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
 </script>
 
 <?php include 'includes/footer.php'; ?>

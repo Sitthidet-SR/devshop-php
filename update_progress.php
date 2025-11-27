@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+// ล้าง output buffer ก่อน
+ob_clean();
+
 header('Content-Type: application/json');
 
 require_once 'includes/config.php';
@@ -56,7 +60,7 @@ if ($conn->query($insert_sql)) {
     
     // อัพเดท progress ใน enrollments
     $update_sql = "UPDATE enrollments 
-                   SET progress = $progress, last_accessed = CURRENT_TIMESTAMP
+                   SET progress = $progress
                    WHERE enrollment_id = $enrollment_id";
     
     $conn->query($update_sql);
@@ -65,8 +69,16 @@ if ($conn->query($insert_sql)) {
         'success' => true, 
         'progress' => $progress,
         'completed' => $completed,
-        'total' => $total
+        'total' => $total,
+        'debug' => [
+            'enrollment_id' => $enrollment_id,
+            'course_id' => $course_id,
+            'lecture_id' => $lecture_id
+        ]
     ]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาด']);
+    echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาด: ' . $conn->error]);
 }
+
+// ปิดการเชื่อมต่อ
+$conn->close();

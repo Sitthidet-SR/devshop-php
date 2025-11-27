@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_avatar'])) {
     require_once 'includes/upload_functions.php';
 
     if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE) {
-        $upload_result = upload_image($_FILES['avatar'], 'users', 2097152); // 2MB
+        $upload_result = upload_image($_FILES['avatar'], 'users', 104857600); // 100MB
 
         if ($upload_result['success']) {
             // ลบรูปเดิม
@@ -238,7 +238,7 @@ $enrolled_courses = $conn->query($enrolled_courses_sql)->fetch_all(MYSQLI_ASSOC)
                                         <?php endif; ?>
                                     </div>
                                     <small style="display: block; margin-top: 10px; color: #7f8c8d;">
-                                        <i class="fas fa-info-circle"></i> รองรับ JPG, PNG, GIF, WebP (สูงสุด 2MB)
+                                        <i class="fas fa-info-circle"></i> รองรับ JPG, PNG, GIF, WebP (สูงสุด <?php echo ini_get('upload_max_filesize'); ?>)
                                     </small>
                                 </form>
                             </div>
@@ -345,11 +345,11 @@ $enrolled_courses = $conn->query($enrolled_courses_sql)->fetch_all(MYSQLI_ASSOC)
                 const file = input.files[0];
 
                 // ตรวจสอบขนาดไฟล์
-                if (file.size > 2097152) {
+                if (file.size > 104857600) {
                     Swal.fire({
                         icon: 'error',
                         title: 'ไฟล์ใหญ่เกินไป',
-                        text: 'ไฟล์มีขนาด ' + (file.size / 1048576).toFixed(2) + ' MB กรุณาเลือกไฟล์ที่เล็กกว่า 2MB',
+                        text: 'ไฟล์มีขนาด ' + (file.size / 1048576).toFixed(2) + ' MB กรุณาเลือกไฟล์ที่เล็กกว่า 100MB',
                         confirmButtonColor: '#667eea',
                         confirmButtonText: 'ตกลง'
                     });

@@ -1,7 +1,7 @@
 <?php
 // ฟังก์ชันสำหรับอัพโหลดไฟล์
 
-function upload_image($file, $folder = 'courses', $max_size = 2097152)
+function upload_image($file, $folder = 'courses', $max_size = 104857600)
 {
     // ตรวจสอบว่ามีไฟล์หรือไม่
     if (!isset($file) || $file['error'] === UPLOAD_ERR_NO_FILE) {
@@ -11,7 +11,7 @@ function upload_image($file, $folder = 'courses', $max_size = 2097152)
     // ตรวจสอบ error แบบละเอียด
     if ($file['error'] !== UPLOAD_ERR_OK) {
         $error_messages = [
-            UPLOAD_ERR_INI_SIZE => 'ไฟล์มีขนาดใหญ่เกินที่กำหนดในเซิร์ฟเวอร์',
+            UPLOAD_ERR_INI_SIZE => 'ไฟล์มีขนาดใหญ่เกินที่กำหนดในเซิร์ฟเวอร์ (สูงสุด ' . ini_get('upload_max_filesize') . ')',
             UPLOAD_ERR_FORM_SIZE => 'ไฟล์มีขนาดใหญ่เกินที่กำหนด',
             UPLOAD_ERR_PARTIAL => 'อัพโหลดไฟล์ไม่สมบูรณ์',
             UPLOAD_ERR_NO_FILE => 'ไม่มีไฟล์ที่อัพโหลด',
@@ -23,9 +23,9 @@ function upload_image($file, $folder = 'courses', $max_size = 2097152)
         return ['success' => false, 'message' => $message];
     }
 
-    // ตรวจสอบขนาดไฟล์ (default 5MB)
+    // ตรวจสอบขนาดไฟล์ (default 100MB)
     if ($file['size'] > $max_size) {
-        return ['success' => false, 'message' => 'ไฟล์มีขนาดใหญ่เกินไป (สูงสุด ' . ($max_size / 1048576) . ' MB)'];
+        return ['success' => false, 'message' => 'ไฟล์มีขนาด ' . round($file['size'] / 1048576, 2) . ' MB ใหญ่เกินไป (สูงสุด ' . round($max_size / 1048576) . ' MB)'];
     }
 
     // ตรวจสอบประเภทไฟล์
